@@ -1,0 +1,26 @@
+{
+    "name": "hexlet/code",
+    "description": "Demo project #2 for Hexlet",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "squizlabs/php_codesniffer": "^3.5",
+        "docopt/docopt": "^1.0"
+    },
+    "scripts": {
+        "phpcs": "phpcs -- --standard=PSR12 bin src",
+        "phpstan-src": "phpstan analyse -l 5 src"
+    },
+    "bin": [
+        "bin/gendiff"
+    ],
+    "autoload": {
+        "files": [
+            "src/func_loader.php"
+        ]
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.58"
+    }
+}
