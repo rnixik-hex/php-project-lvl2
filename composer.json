@@ -19,9 +19,13 @@
     "autoload": {
         "files": [
             "src/func_loader.php"
-        ]
+        ],
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.58"
+        "phpstan/phpstan": "^0.12.58",
+        "phpunit/phpunit": "^9.5"
     }
 }

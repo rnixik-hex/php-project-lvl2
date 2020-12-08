@@ -5,6 +5,8 @@ SHELL = /bin/bash
 CURRENT_RUN_USER_ID := $(shell id -u)
 CURRENT_RUN_USER_NAME := "${USER}"
 
+.PHONY: tests
+
 docker-build:
 	docker build -t local-php-project-lvl1 --build-arg "RUN_USER_ID=${CURRENT_RUN_USER_ID}" --build-arg "RUN_USER_NAME=${CURRENT_RUN_USER_NAME}" -f ./Dockerfile .
 
@@ -25,6 +27,9 @@ validate:
 lint:
 	composer phpcs
 	composer phpstan
+
+tests:
+	vendor/bin/phpunit tests
 
 docker-asciinema-auth:
 	mkdir -p "${HOME}/.config/asciinema"
