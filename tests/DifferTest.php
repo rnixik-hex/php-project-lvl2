@@ -10,6 +10,8 @@ class DifferTest extends TestCase
 {
     /**
      * @covers \Differ\Differ\genDiff
+     * @covers \Differ\Differ\convertDiffToOutput
+     * @covers \Differ\Differ\getDiff
      */
     public function testGenDiffPlain()
     {
