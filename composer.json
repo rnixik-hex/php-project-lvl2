@@ -10,8 +10,8 @@
         "tightenco/collect": "^8.17"
     },
     "scripts": {
-        "phpcs": "phpcs -- --standard=PSR12 bin src",
-        "phpstan-src": "phpstan analyse -l 5 src"
+        "phpcs": "phpcs -- --standard=PSR12 bin src tests",
+        "phpstan-src": "phpstan analyse -l 5 src tests"
     },
     "bin": [
         "bin/gendiff"
