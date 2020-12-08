@@ -7,6 +7,20 @@ use Tightenco\Collect\Support\Collection;
 use function Differ\Parsers\parseJson;
 use function Differ\Parsers\parseYaml;
 
+const PROP_KEY = 'key';
+const PROP_OLD_VALUE = 'old_value';
+const PROP_NEW_VALUE = 'new_value';
+const PROP_DIFF_TYPE = 'diff_type';
+const PROP_CHILDREN = 'children';
+
+const DIFF_TYPE_ADDED = 'added';
+const DIFF_TYPE_REMOVED = 'removed';
+const DIFF_TYPE_UPDATED = 'update';
+const DIFF_TYPE_UNCHANGED = 'unchanged';
+const DIFF_TYPE_UPDATED_CHILDREN = 'updated_children';
+
+const KEY_ROOT = 'root';
+
 function genDiff(string $file1, string $file2): string
 {
     if (!is_file($file1) || !is_readable($file1)) {
@@ -43,9 +57,9 @@ function genDiff(string $file1, string $file2): string
     $data1 = $parsersMap[$ext1]($file1);
     $data2 = $parsersMap[$ext2]($file2);
 
-    [$addedValues, $removedValues, $updatedValues, $firstValues] = getDiff($data1, $data2);
+    $diffTree = getDiffTree($data1, $data2);
 
-    return convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firstValues);
+    return json_encode($diffTree, JSON_PRETTY_PRINT);
 }
 
 function convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firstValues): string
@@ -86,28 +100,66 @@ function convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firs
     return "{\n  " . implode('  ', $lines) . "}";
 }
 
-function getDiff(array $data1, array $data2): array
+function getDiffTree($value1, $value2): array
 {
-    $addedValues = array_filter(
-        $data2,
-        fn($value, $key) => !array_key_exists($key, $data1),
-        ARRAY_FILTER_USE_BOTH
-    );
-    $removedValues = array_filter(
-        $data1,
-        fn($value, $key) => !array_key_exists($key, $data2),
-        ARRAY_FILTER_USE_BOTH
-    );
-    $updatedValues = array_filter(
-        $data2,
-        fn($value, $key) => array_key_exists($key, $data1) && $data1[$key] !== $value,
-        ARRAY_FILTER_USE_BOTH
-    );
+    if (!is_array($value1) || !is_array($value2)) {
+        if ($value1 === $value2) {
+            return [
+                PROP_KEY => KEY_ROOT,
+                PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
+                PROP_OLD_VALUE => $value1,
+                PROP_NEW_VALUE => $value2,
+            ];
+        }
 
-    return [
-        $addedValues,
-        $removedValues,
-        $updatedValues,
-        $data1
-    ];
+        return [
+            PROP_KEY => KEY_ROOT,
+            PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
+            PROP_OLD_VALUE => $value1,
+            PROP_NEW_VALUE => $value2,
+        ];
+    }
+
+    $mergedKeys = array_merge(array_keys($value1), array_keys($value2));
+    $keys = array_values(array_unique($mergedKeys));
+
+    return array_map(function ($key) use ($value1, $value2) {
+        if (array_key_exists($key, $value1) && array_key_exists($key, $value2)) {
+            if ($value1[$key] === $value2[$key]) {
+                return [
+                    PROP_KEY => $key,
+                    PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
+                    PROP_OLD_VALUE => $value1[$key],
+                    PROP_NEW_VALUE => $value2[$key],
+                ];
+            }
+            if (is_array($value1[$key]) && is_array($value2[$key])) {
+                return [
+                    PROP_KEY => $key,
+                    PROP_DIFF_TYPE => DIFF_TYPE_UPDATED_CHILDREN,
+                    PROP_CHILDREN => getDiffTree($value1[$key], $value2[$key]),
+                ];
+            }
+            return [
+                PROP_KEY => $key,
+                PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
+                PROP_OLD_VALUE => $value1[$key],
+                PROP_NEW_VALUE => $value2[$key],
+            ];
+        }
+        if (array_key_exists($key, $value2)) {
+            return [
+                PROP_KEY => $key,
+                PROP_DIFF_TYPE => DIFF_TYPE_ADDED,
+                PROP_NEW_VALUE => $value2[$key],
+            ];
+        }
+        if (array_key_exists($key, $value1)) {
+            return [
+                PROP_KEY => $key,
+                PROP_DIFF_TYPE => DIFF_TYPE_REMOVED,
+                PROP_OLD_VALUE => $value1[$key],
+            ];
+        }
+    }, $keys);
 }
