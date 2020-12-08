@@ -4,6 +4,9 @@ namespace Differ\Differ;
 
 use Tightenco\Collect\Support\Collection;
 
+use function Differ\Parsers\parseJson;
+use function Differ\Parsers\parseYaml;
+
 function genDiff(string $file1, string $file2): string
 {
     if (!is_file($file1) || !is_readable($file1)) {
@@ -13,11 +16,32 @@ function genDiff(string $file1, string $file2): string
         throw new \Exception("Second file '$file2' is not readable");
     }
 
-    $contents1 = file_get_contents($file1);
-    $contents2 = file_get_contents($file2);
+    $ext1 = pathinfo($file1)['extension'] ?? null;
+    $ext2 = pathinfo($file2)['extension'] ?? null;
 
-    $data1 = (array) json_decode($contents1, true);
-    $data2 = (array) json_decode($contents2, true);
+    if (!$ext1) {
+        throw new \Exception("Cannot get extension from the first file '$file1'");
+    }
+    if (!$ext2) {
+        throw new \Exception("Cannot get extension from the second file '$file2'");
+    }
+
+    $parsersMap = [
+        'json' => fn($file) => parseJson($file),
+        'yaml' => fn($file) => parseYaml($file),
+        'yml' => fn($file) => parseYaml($file),
+    ];
+
+    if (empty($parsersMap[$ext1])) {
+        throw new \Exception("Extension '$ext1' is unsupported'");
+    }
+
+    if (empty($parsersMap[$ext2])) {
+        throw new \Exception("Extension '$ext2' is unsupported'");
+    }
+
+    $data1 = $parsersMap[$ext1]($file1);
+    $data2 = $parsersMap[$ext2]($file2);
 
     [$addedValues, $removedValues, $updatedValues, $firstValues] = getDiff($data1, $data2);
 
@@ -54,12 +78,12 @@ function convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firs
         }
         if (array_key_exists($key, $updatedValues)) {
             return "- " . $encodeKeyValueLine($key, $firstValues[$key])
-                . "+ " . $encodeKeyValueLine($key, $updatedValues[$key]);
+                . "  + " . $encodeKeyValueLine($key, $updatedValues[$key]);
         }
         return "  " . $encodeKeyValueLine($key, $firstValues[$key]);
     }, $sortedKeys);
 
-    return implode('', $lines);
+    return "{\n  " . implode('  ', $lines) . "}";
 }
 
 function getDiff(array $data1, array $data2): array

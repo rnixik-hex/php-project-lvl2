@@ -31,3 +31,6 @@ Options:
 
 ### One-level json diff
 [![asciicast](https://asciinema.org/a/ORmi518mU9kakAy1kyzQw85LT.svg)](https://asciinema.org/a/ORmi518mU9kakAy1kyzQw85LT)
+
+### One-level yaml diff
+[![asciicast](https://asciinema.org/a/wHrBNQP0qnrD7QIurjFVOeFK9.svg)](https://asciinema.org/a/wHrBNQP0qnrD7QIurjFVOeFK9)

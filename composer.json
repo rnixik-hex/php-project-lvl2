@@ -7,7 +7,9 @@
     "require": {
         "squizlabs/php_codesniffer": "^3.5",
         "docopt/docopt": "^1.0",
-        "tightenco/collect": "^8.17"
+        "tightenco/collect": "^8.17",
+        "ext-json": "*",
+        "symfony/yaml": "^5.2"
     },
     "scripts": {
         "phpcs": "phpcs -- --standard=PSR12 bin src tests",
@@ -19,7 +21,9 @@
     "autoload": {
         "files": [
             "src/func_loader.php"
-        ],
+        ]
+    },
+    "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
