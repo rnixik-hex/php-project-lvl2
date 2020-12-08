@@ -18,3 +18,6 @@ Options:
 DOC;
 
 $args = Docopt::handle($doc);
+
+$diff = \Differ\Differ\genDiff($args['<firstFile>'], $args['<secondFile>']);
+echo "$diff\n";
