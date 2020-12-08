@@ -8,6 +8,9 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
+    /**
+     * @covers \Differ\Differ\genDiff
+     */
     public function testGenDiffPlain()
     {
         $actual = genDiff('tests/fixtures/1.json', 'tests/fixtures/2.json');
