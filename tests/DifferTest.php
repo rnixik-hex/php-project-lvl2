@@ -10,9 +10,11 @@ class DifferTest extends TestCase
 {
     /**
      * @covers \Differ\Differ\genDiff
-     * @covers \Differ\Differ\convertDiffToOutput
-     * @covers \Differ\Differ\getDiff
-     * @covers \Differ\Parsers\parseJson
+     * @covers \Differ\Differ\getDiffTree
+     * @covers \Differ\Parsers\Json\parse
+     * @covers \Differ\Formatters\Stylish\format
+     * @covers \Differ\Formatters\Stylish\formatInner
+     * @covers \Differ\Formatters\Stylish\formatValue
      */
     public function testGenDiffJsonOk()
     {
@@ -69,9 +71,11 @@ class DifferTest extends TestCase
 
     /**
      * @covers \Differ\Differ\genDiff
-     * @covers \Differ\Differ\convertDiffToOutput
-     * @covers \Differ\Differ\getDiff
-     * @covers \Differ\Parsers\parseYaml
+     * @covers \Differ\Differ\getDiffTree
+     * @covers \Differ\Parsers\Yaml\parse
+     * @covers \Differ\Formatters\Stylish\format
+     * @covers \Differ\Formatters\Stylish\formatInner
+     * @covers \Differ\Formatters\Stylish\formatValue
      */
     public function testGenDiffYamlOk()
     {

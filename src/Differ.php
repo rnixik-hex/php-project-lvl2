@@ -2,8 +2,6 @@
 
 namespace Differ\Differ;
 
-use Tightenco\Collect\Support\Collection;
-
 use function Differ\Formatters\Stylish\format as formatStylish;
 use function Differ\Parsers\Json\parse as parseJson;
 use function Differ\Parsers\Yaml\parse as parseYaml;
@@ -69,44 +67,6 @@ function genDiff(string $file1, string $file2, string $format = 'stylish'): stri
     $diffTree = getDiffTree($data1, $data2);
 
     return $formatToFormattersMap[$format]($diffTree);
-}
-
-function convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firstValues): string
-{
-    $allKeys = array_keys(array_merge($addedValues, $removedValues, $updatedValues, $firstValues));
-
-    // Use collection to sort keys without data mutation
-    $keysCollection = new Collection($allKeys);
-    $sortedKeys = $keysCollection->sort()->values()->toArray();
-
-    $encodeKeyValueLine = function ($key, $value) {
-        if (is_bool($value)) {
-            return "$key: " . ($value ? 'true' : 'false') . "\n";
-        }
-        return "$key: $value\n";
-    };
-
-    $lines = array_map(function ($key) use (
-        $addedValues,
-        $removedValues,
-        $updatedValues,
-        $firstValues,
-        $encodeKeyValueLine
-    ) {
-        if (array_key_exists($key, $addedValues)) {
-            return "+ " . $encodeKeyValueLine($key, $addedValues[$key]);
-        }
-        if (array_key_exists($key, $removedValues)) {
-            return "- " . $encodeKeyValueLine($key, $removedValues[$key]);
-        }
-        if (array_key_exists($key, $updatedValues)) {
-            return "- " . $encodeKeyValueLine($key, $firstValues[$key])
-                . "  + " . $encodeKeyValueLine($key, $updatedValues[$key]);
-        }
-        return "  " . $encodeKeyValueLine($key, $firstValues[$key]);
-    }, $sortedKeys);
-
-    return "{\n  " . implode('  ', $lines) . "}";
 }
 
 function getDiffTree($value1, $value2): array
