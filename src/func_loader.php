@@ -2,6 +2,8 @@
 
 $directoriesToScan = [
     '.',
+    'Formatters',
+    'Parsers',
 ];
 
 foreach ($directoriesToScan as $directory) {

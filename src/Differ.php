@@ -4,8 +4,9 @@ namespace Differ\Differ;
 
 use Tightenco\Collect\Support\Collection;
 
-use function Differ\Parsers\parseJson;
-use function Differ\Parsers\parseYaml;
+use function Differ\Formatters\Stylish\format as formatStylish;
+use function Differ\Parsers\Json\parse as parseJson;
+use function Differ\Parsers\Yaml\parse as parseYaml;
 
 const PROP_KEY = 'key';
 const PROP_OLD_VALUE = 'old_value';
@@ -21,7 +22,7 @@ const DIFF_TYPE_UPDATED_CHILDREN = 'updated_children';
 
 const KEY_ROOT = 'root';
 
-function genDiff(string $file1, string $file2): string
+function genDiff(string $file1, string $file2, string $format = 'stylish'): string
 {
     if (!is_file($file1) || !is_readable($file1)) {
         throw new \Exception("First file '$file1' is not readable");
@@ -40,26 +41,34 @@ function genDiff(string $file1, string $file2): string
         throw new \Exception("Cannot get extension from the second file '$file2'");
     }
 
-    $parsersMap = [
+    $extensionToParsersMap = [
         'json' => fn($file) => parseJson($file),
         'yaml' => fn($file) => parseYaml($file),
         'yml' => fn($file) => parseYaml($file),
     ];
 
-    if (empty($parsersMap[$ext1])) {
+    if (empty($extensionToParsersMap[$ext1])) {
         throw new \Exception("Extension '$ext1' is unsupported'");
     }
 
-    if (empty($parsersMap[$ext2])) {
+    if (empty($extensionToParsersMap[$ext2])) {
         throw new \Exception("Extension '$ext2' is unsupported'");
     }
 
-    $data1 = $parsersMap[$ext1]($file1);
-    $data2 = $parsersMap[$ext2]($file2);
+    $formatToFormattersMap = [
+        'stylish' => fn($diffTree) => formatStylish($diffTree),
+    ];
+
+    if (empty($formatToFormattersMap[$format])) {
+        throw new \Exception("Format '$format' is unsupported'");
+    }
+
+    $data1 = $extensionToParsersMap[$ext1]($file1);
+    $data2 = $extensionToParsersMap[$ext2]($file2);
 
     $diffTree = getDiffTree($data1, $data2);
 
-    return json_encode($diffTree, JSON_PRETTY_PRINT);
+    return $formatToFormattersMap[$format]($diffTree);
 }
 
 function convertDiffToOutput($addedValues, $removedValues, $updatedValues, $firstValues): string
@@ -161,5 +170,7 @@ function getDiffTree($value1, $value2): array
                 PROP_OLD_VALUE => $value1[$key],
             ];
         }
+
+        throw new \Exception("Unexpected branch of code");
     }, $keys);
 }

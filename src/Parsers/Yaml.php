@@ -1,17 +1,10 @@
 <?php
 
-namespace Differ\Parsers;
+namespace Differ\Parsers\Yaml;
 
 use Symfony\Component\Yaml\Yaml;
 
-function parseJson(string $file): array
-{
-    $contents = file_get_contents($file);
-
-    return (array) json_decode($contents, true);
-}
-
-function parseYaml(string $file): array
+function parse(string $file): array
 {
     $contents = file_get_contents($file);
     $map = Yaml::parse($contents, Yaml::PARSE_OBJECT_FOR_MAP);
