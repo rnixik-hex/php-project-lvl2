@@ -8,5 +8,5 @@ function parse(string $contents): array
 {
     $map = Yaml::parse($contents, Yaml::PARSE_OBJECT_FOR_MAP);
 
-    return (array) json_decode(json_encode($map), true);
+    return (array) json_decode((string) json_encode($map), true);
 }
