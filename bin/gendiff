@@ -18,6 +18,5 @@ Options:
 DOC;
 
 $args = Docopt::handle($doc);
-
-$diff = \Differ\Differ\genDiff($args['<firstFile>'], $args['<secondFile>'], $args['<fmt>'] ?? 'stylish');
+$diff = \Differ\Differ\genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format'] ?? 'stylish');
 echo "$diff\n";
