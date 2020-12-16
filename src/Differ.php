@@ -83,6 +83,12 @@ function genDiff(string $file1, string $file2, string $format = 'stylish'): stri
     return $formatToFormattersMap[$format]($diffTree);
 }
 
+/**
+ * @param mixed $value1
+ * @param mixed $value2
+ * @return array
+ * @throws \Exception
+ */
 function getDiffTree($value1, $value2): array
 {
     if (!is_array($value1) || !is_array($value2)) {

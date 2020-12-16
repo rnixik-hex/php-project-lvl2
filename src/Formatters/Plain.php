@@ -68,6 +68,10 @@ function formatKeyWithPath(string $key, string $path): string
     return "Property '$fullPath'";
 }
 
+/**
+ * @param mixed $value
+ * @return string
+ */
 function formatValue($value): string
 {
     $variableType = gettype($value);

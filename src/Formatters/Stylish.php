@@ -62,6 +62,11 @@ function formatInner(array $diffTree, int $depth): string
     }, '');
 }
 
+/**
+ * @param mixed $value
+ * @param int $depth
+ * @return string
+ */
 function formatValue($value, int $depth): string
 {
     $variableType = gettype($value);

@@ -13,7 +13,7 @@
     },
     "scripts": {
         "phpcs": "phpcs -- --standard=PSR12 bin src tests",
-        "phpstan-src": "phpstan analyse -l 5 src tests"
+        "phpstan-src": "phpstan analyse -l 8 src tests"
     },
     "bin": [
         "bin/gendiff"
