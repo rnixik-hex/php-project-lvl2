@@ -1,6 +1,7 @@
 # Gendiff
 
 Educational demo project.
+It computes the difference between two files.
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/rnixik-hex/php-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/rnixik-hex/php-project-lvl2/actions)
@@ -8,6 +9,17 @@ Educational demo project.
 [![Tests](https://github.com/rnixik-hex/php-project-lvl2/workflows/Tests/badge.svg)](https://github.com/rnixik-hex/php-project-lvl1/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/278a171cb379c16647ca/maintainability)](https://codeclimate.com/github/rnixik-hex/php-project-lvl2/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/278a171cb379c16647ca/test_coverage)](https://codeclimate.com/github/rnixik-hex/php-project-lvl2/test_coverage)
+
+### Supported formats are:
+
+#### Input:
+* json
+* yml
+
+#### Output:
+* stylish
+* plain
+* json
 
 ## Usage
 
@@ -29,8 +41,4 @@ Options:
 
 ## Demo
 
-### One-level json diff
-[![asciicast](https://asciinema.org/a/ORmi518mU9kakAy1kyzQw85LT.svg)](https://asciinema.org/a/ORmi518mU9kakAy1kyzQw85LT)
-
-### One-level yaml diff
-[![asciicast](https://asciinema.org/a/wHrBNQP0qnrD7QIurjFVOeFK9.svg)](https://asciinema.org/a/wHrBNQP0qnrD7QIurjFVOeFK9)
+[![asciicast](https://asciinema.org/a/tIdILmOfhUKJqptMbGXTlmfNP.svg)](https://asciinema.org/a/tIdILmOfhUKJqptMbGXTlmfNP)
