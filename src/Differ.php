@@ -65,8 +65,18 @@ function genDiff(string $file1, string $file2, string $format = 'stylish'): stri
         throw new \Exception("Format '$format' is unsupported'");
     }
 
-    $data1 = $extensionToParsersMap[$ext1]($file1);
-    $data2 = $extensionToParsersMap[$ext2]($file2);
+    $contents1 = file_get_contents($file1);
+    if ($contents1 === false) {
+        throw new \Exception("Cannot read the first file '$file1'");
+    }
+
+    $contents2 = file_get_contents($file2);
+    if ($contents2 === false) {
+        throw new \Exception("Cannot read the second file '$file2'");
+    }
+
+    $data1 = $extensionToParsersMap[$ext1]($contents1);
+    $data2 = $extensionToParsersMap[$ext2]($contents2);
 
     $diffTree = getDiffTree($data1, $data2);
 

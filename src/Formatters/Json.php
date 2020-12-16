@@ -8,5 +8,5 @@ function format(array $diffTree): string
         return '';
     }
 
-    return json_encode($diffTree, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return (string) json_encode($diffTree, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }

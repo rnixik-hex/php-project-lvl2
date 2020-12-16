@@ -16,7 +16,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Formatters\Stylish\formatInner
      * @covers \Differ\Formatters\Stylish\formatValue
      */
-    public function testGenDiffJsonStylishOk()
+    public function testGenDiffJsonStylishOk(): void
     {
         $actual = genDiff('tests/fixtures/1.json', 'tests/fixtures/2.json', 'stylish');
         $expected = <<<EXP
@@ -77,7 +77,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Formatters\Stylish\formatInner
      * @covers \Differ\Formatters\Stylish\formatValue
      */
-    public function testGenDiffYamlStylishOk()
+    public function testGenDiffYamlStylishOk(): void
     {
         $actual = genDiff('tests/fixtures/1.yml', 'tests/fixtures/2.yml', 'stylish');
         $expected = <<<EXP
@@ -140,7 +140,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Formatters\Plain\formatKeyWithPath
      * @covers \Differ\Formatters\Plain\formatValue
      */
-    public function testGenDiffJsonPlainOk()
+    public function testGenDiffJsonPlainOk(): void
     {
         $actual = genDiff('tests/fixtures/1.json', 'tests/fixtures/2.json', 'plain');
         $expected = <<<EXP
@@ -166,7 +166,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Parsers\Json\parse
      * @covers \Differ\Formatters\Json\format
      */
-    public function testGenDiffJsonFormatJsonOk()
+    public function testGenDiffJsonFormatJsonOk(): void
     {
         $actual = genDiff('tests/fixtures/1.json', 'tests/fixtures/2.json', 'json');
         $expected = <<<EXP
@@ -294,7 +294,7 @@ class DifferTest extends TestCase
     /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadFile1()
+    public function testGenDiffBadFile1(): void
     {
         $this->expectException(\Exception::class);
         genDiff('wrong_path.json', 'tests/fixtures/2.json', 'stylish');
@@ -303,7 +303,7 @@ class DifferTest extends TestCase
     /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadFile2()
+    public function testGenDiffBadFile2(): void
     {
         $this->expectException(\Exception::class);
         genDiff('tests/fixtures/1.json', 'wrong_path.json', 'stylish');
@@ -312,7 +312,7 @@ class DifferTest extends TestCase
     /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadExtension1()
+    public function testGenDiffBadExtension1(): void
     {
         $this->expectException(\Exception::class);
         genDiff('tests/fixtures/bad_extension.txt', 'tests/fixtures/2.json', 'stylish');
@@ -321,7 +321,7 @@ class DifferTest extends TestCase
     /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadExtension2()
+    public function testGenDiffBadExtension2(): void
     {
         $this->expectException(\Exception::class);
         genDiff('tests/fixtures/1.json', 'tests/fixtures/bad_extension.txt', 'stylish');
