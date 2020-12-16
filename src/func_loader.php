@@ -6,15 +6,15 @@ $directoriesToScan = [
     'Parsers',
 ];
 
-array_map(
+array_walk(
+    $directoriesToScan,
     fn($directory) => array_map(
         function ($fileName) {
             if ($fileName === __FILE__) {
                 return;
             }
-            include_once $fileName;
+            require_once $fileName;
         },
         (array) glob(__DIR__ . '/' . $directory . '/*.php')
     ),
-    $directoriesToScan
 );
