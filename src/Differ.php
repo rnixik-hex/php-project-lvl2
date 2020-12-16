@@ -4,6 +4,7 @@ namespace Differ\Differ;
 
 use function Differ\Formatters\Stylish\format as formatStylish;
 use function Differ\Formatters\Plain\format as formatPlain;
+use function Differ\Formatters\Json\format as formatJson;
 use function Differ\Parsers\Json\parse as parseJson;
 use function Differ\Parsers\Yaml\parse as parseYaml;
 
@@ -57,6 +58,7 @@ function genDiff(string $file1, string $file2, string $format = 'stylish'): stri
     $formatToFormattersMap = [
         'stylish' => fn($diffTree) => formatStylish($diffTree),
         'plain' => fn($diffTree) => formatPlain($diffTree),
+        'json' => fn($diffTree) => formatJson($diffTree),
     ];
 
     if (empty($formatToFormattersMap[$format])) {
