@@ -46,7 +46,7 @@ function formatInner(array $diffTree, int $depth): string
             . formatValue($node[PROP_NEW_VALUE], $depth),
 
         DIFF_TYPE_UNCHANGED => fn($node) => $indent . INDENT_HALF . $node[PROP_KEY] . ': '
-            . formatValue($node[PROP_NEW_VALUE], $depth),
+            . formatValue($node[PROP_OLD_VALUE], $depth),
 
         DIFF_TYPE_UPDATED_CHILDREN => fn($node) =>  $indent . INDENT_HALF . $node[PROP_KEY] . ": {\n"
             . formatInner($node[PROP_CHILDREN], $depth + 1)

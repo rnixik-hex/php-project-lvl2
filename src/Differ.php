@@ -79,7 +79,6 @@ function getDiffTree($value1, $value2): array
                 PROP_KEY => KEY_ROOT,
                 PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
                 PROP_OLD_VALUE => $value1,
-                PROP_NEW_VALUE => $value2,
             ];
         }
 
@@ -101,7 +100,6 @@ function getDiffTree($value1, $value2): array
                     PROP_KEY => $key,
                     PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
                     PROP_OLD_VALUE => $value1[$key],
-                    PROP_NEW_VALUE => $value2[$key],
                 ];
             }
             if (is_array($value1[$key]) && is_array($value2[$key])) {
