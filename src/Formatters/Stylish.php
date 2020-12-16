@@ -33,7 +33,7 @@ function formatInner(array $diffTree, int $depth): string
 {
     $indent = str_repeat(INDENT_DOUBLE, $depth - 1) . INDENT_HALF;
 
-    $diffTypesMap = [
+    $diffTypeFormattersMap = [
         DIFF_TYPE_ADDED => fn($node) => $indent . INDENT_ADD . $node[PROP_KEY] . ': '
             . formatValue($node[PROP_NEW_VALUE], $depth),
 
@@ -57,8 +57,8 @@ function formatInner(array $diffTree, int $depth): string
     $nodesCollection = new Collection($diffTree);
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
-    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypesMap) {
-        return $output . $diffTypesMap[$node[PROP_DIFF_TYPE]]($node);
+    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap) {
+        return $output . $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]]($node);
     }, '');
 }
 

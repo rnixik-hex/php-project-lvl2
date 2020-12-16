@@ -25,7 +25,7 @@ function format(array $diffTree): string
 
 function formatInner(array $diffTree, string $path): string
 {
-    $diffTypesMap = [
+    $diffTypeFormattersMap = [
         DIFF_TYPE_ADDED => fn($node) => formatKeyWithPath($node[PROP_KEY], $path)
             . ' was added with value: ' . formatValue($node[PROP_NEW_VALUE]) . "\n",
 
@@ -39,13 +39,12 @@ function formatInner(array $diffTree, string $path): string
             fn($node) => formatInner($node[PROP_CHILDREN], appendKeyToPath($node[PROP_KEY], $path)),
     ];
 
-
     // Use collection to sort nodes without data mutation
     $nodesCollection = new Collection($diffTree);
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
-    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypesMap) {
-        $formatter = $diffTypesMap[$node[PROP_DIFF_TYPE]] ?? null;
+    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap) {
+        $formatter = $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]] ?? null;
         if (!$formatter) {
             return $output;
         }
