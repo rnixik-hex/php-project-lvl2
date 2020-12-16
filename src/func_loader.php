@@ -1,4 +1,7 @@
 <?php
+/*
+ * Auto loads all files (with functions) from specified directories.
+ */
 
 $directoriesToScan = [
     '.',
