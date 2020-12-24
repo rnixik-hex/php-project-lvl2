@@ -2,9 +2,7 @@
 
 namespace Differ\Differ;
 
-use function Differ\Formatters\Stylish\format as formatStylish;
-use function Differ\Formatters\Plain\format as formatPlain;
-use function Differ\Formatters\Json\format as formatJson;
+use function Differ\Formatters\formatDiffTree;
 use function Differ\Parsers\parseContents;
 
 use const Differ\Parsers\CONTENTS_FORMAT_JSON;
@@ -57,16 +55,6 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Extension '$ext2' is unsupported'");
     }
 
-    $formatToFormattersMap = [
-        'stylish' => fn($diffTree) => formatStylish($diffTree),
-        'plain' => fn($diffTree) => formatPlain($diffTree),
-        'json' => fn($diffTree) => formatJson($diffTree),
-    ];
-
-    if (empty($formatToFormattersMap[$format])) {
-        throw new \Exception("Format '$format' is unsupported'");
-    }
-
     $contents1 = file_get_contents($filepath1);
     if ($contents1 === false) {
         throw new \Exception("Cannot read the first file '$filepath1'");
@@ -82,7 +70,7 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
 
     $diffTree = getDiffTree($data1, $data2);
 
-    return $formatToFormattersMap[$format]($diffTree);
+    return formatDiffTree($diffTree, $format);
 }
 
 /**
