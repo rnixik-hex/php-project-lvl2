@@ -9,8 +9,8 @@ use function Differ\Differ\genDiff;
 class DifferTest extends TestCase
 {
     /**
-     * @param string $file1
-     * @param string $file2
+     * @param string $filename1
+     * @param string $filename2
      * @param string $format
      * @param string $diffFile
      * @throws \Exception
@@ -31,9 +31,13 @@ class DifferTest extends TestCase
      * @covers       \Differ\Formatters\Plain\formatValue
      * @covers       \Differ\Formatters\Json\format
      */
-    public function testGenDiffOk(string $file1, string $file2, string $format, string $diffFile): void
+    public function testGenDiffOk(string $filename1, string $filename2, string $format, string $diffFile): void
     {
-        $actualDiffContent = genDiff($this->getFullFixturePath($file1), $this->getFullFixturePath($file2), $format);
+        $actualDiffContent = genDiff(
+            $this->getFullFixturePath($filename1),
+            $this->getFullFixturePath($filename2),
+            $format
+        );
         $this->assertStringEqualsFile($this->getFullFixturePath($diffFile), $actualDiffContent);
     }
 
@@ -48,9 +52,26 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers       \Differ\Differ\genDiff
+     * @covers       \Differ\Differ\getDiffTree
+     * @covers       \Differ\Parsers\Json\parse
+     * @covers       \Differ\Formatters\Stylish\format
+     * @covers       \Differ\Formatters\Stylish\formatInner
+     * @covers       \Differ\Formatters\Stylish\formatValue
+     */
+    public function testGenDiffDefaultFormat(): void
+    {
+        $actualDiffContent = genDiff(
+            $this->getFullFixturePath('1.json'),
+            $this->getFullFixturePath('2.json'),
+        );
+        $this->assertStringEqualsFile($this->getFullFixturePath('diff_stylish.txt'), $actualDiffContent);
+    }
+
+    /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadFile1(): void
+    public function testGenDiffBadFilepath1(): void
     {
         $wrongPath = $this->getFullFixturePath('wrong_path.json');
         $this->expectExceptionMessage("First file '$wrongPath' is not readable");
@@ -63,7 +84,7 @@ class DifferTest extends TestCase
     /**
      * @covers \Differ\Differ\genDiff
      */
-    public function testGenDiffBadFile2(): void
+    public function testGenDiffBadFilepath2(): void
     {
         $wrongPath = $this->getFullFixturePath('wrong_path.json');
         $this->expectExceptionMessage("Second file '$wrongPath' is not readable");
