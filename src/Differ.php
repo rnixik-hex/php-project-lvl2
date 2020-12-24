@@ -5,8 +5,10 @@ namespace Differ\Differ;
 use function Differ\Formatters\Stylish\format as formatStylish;
 use function Differ\Formatters\Plain\format as formatPlain;
 use function Differ\Formatters\Json\format as formatJson;
-use function Differ\Parsers\Json\parse as parseJson;
-use function Differ\Parsers\Yaml\parse as parseYaml;
+use function Differ\Parsers\parseContents;
+
+use const Differ\Parsers\CONTENTS_FORMAT_JSON;
+use const Differ\Parsers\CONTENTS_FORMAT_YAML;
 
 const PROP_KEY = 'key';
 const PROP_OLD_VALUE = 'old_value';
@@ -41,17 +43,17 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Cannot get extension from the second file '$filepath2'");
     }
 
-    $extensionToParsersMap = [
-        'json' => fn($file) => parseJson($file),
-        'yaml' => fn($file) => parseYaml($file),
-        'yml' => fn($file) => parseYaml($file),
+    $extensionToFormatMap = [
+        'json' => CONTENTS_FORMAT_JSON,
+        'yaml' => CONTENTS_FORMAT_YAML,
+        'yml' => CONTENTS_FORMAT_YAML,
     ];
 
-    if (empty($extensionToParsersMap[$ext1])) {
+    if (empty($extensionToFormatMap[$ext1])) {
         throw new \Exception("Extension '$ext1' is unsupported'");
     }
 
-    if (empty($extensionToParsersMap[$ext2])) {
+    if (empty($extensionToFormatMap[$ext2])) {
         throw new \Exception("Extension '$ext2' is unsupported'");
     }
 
@@ -75,8 +77,8 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Cannot read the second file '$filepath2'");
     }
 
-    $data1 = $extensionToParsersMap[$ext1]($contents1);
-    $data2 = $extensionToParsersMap[$ext2]($contents2);
+    $data1 = parseContents($contents1, $extensionToFormatMap[$ext1]);
+    $data2 = parseContents($contents2, $extensionToFormatMap[$ext2]);
 
     $diffTree = getDiffTree($data1, $data2);
 
