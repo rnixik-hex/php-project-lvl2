@@ -22,23 +22,23 @@ const DIFF_TYPE_UPDATED_CHILDREN = 'updated_children';
 
 const KEY_ROOT = 'root';
 
-function genDiff(string $file1, string $file2, string $format = 'stylish'): string
+function genDiff(string $filepath1, string $filepath2, string $format = 'stylish'): string
 {
-    if (!is_file($file1) || !is_readable($file1)) {
-        throw new \Exception("First file '$file1' is not readable");
+    if (!is_file($filepath1) || !is_readable($filepath1)) {
+        throw new \Exception("First file '$filepath1' is not readable");
     }
-    if (!is_file($file2) || !is_readable($file2)) {
-        throw new \Exception("Second file '$file2' is not readable");
+    if (!is_file($filepath2) || !is_readable($filepath2)) {
+        throw new \Exception("Second file '$filepath2' is not readable");
     }
 
-    $ext1 = pathinfo($file1)['extension'] ?? null;
-    $ext2 = pathinfo($file2)['extension'] ?? null;
+    $ext1 = pathinfo($filepath1)['extension'] ?? null;
+    $ext2 = pathinfo($filepath2)['extension'] ?? null;
 
     if (!$ext1) {
-        throw new \Exception("Cannot get extension from the first file '$file1'");
+        throw new \Exception("Cannot get extension from the first file '$filepath1'");
     }
     if (!$ext2) {
-        throw new \Exception("Cannot get extension from the second file '$file2'");
+        throw new \Exception("Cannot get extension from the second file '$filepath2'");
     }
 
     $extensionToParsersMap = [
@@ -65,14 +65,14 @@ function genDiff(string $file1, string $file2, string $format = 'stylish'): stri
         throw new \Exception("Format '$format' is unsupported'");
     }
 
-    $contents1 = file_get_contents($file1);
+    $contents1 = file_get_contents($filepath1);
     if ($contents1 === false) {
-        throw new \Exception("Cannot read the first file '$file1'");
+        throw new \Exception("Cannot read the first file '$filepath1'");
     }
 
-    $contents2 = file_get_contents($file2);
+    $contents2 = file_get_contents($filepath2);
     if ($contents2 === false) {
-        throw new \Exception("Cannot read the second file '$file2'");
+        throw new \Exception("Cannot read the second file '$filepath2'");
     }
 
     $data1 = $extensionToParsersMap[$ext1]($contents1);
