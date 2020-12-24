@@ -17,10 +17,13 @@ class DifferTest extends TestCase
      *
      * @dataProvider genDiffOkDataProvider
      *
+     * @covers       \Differ\Differ\getFileFormatFromExtension
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
+     * @covers       \Differ\Parsers\parseContents
      * @covers       \Differ\Parsers\Json\parse
      * @covers       \Differ\Parsers\Yaml\parse
+     * @covers       \Differ\Formatters\formatDiffTree
      * @covers       \Differ\Formatters\Stylish\format
      * @covers       \Differ\Formatters\Stylish\formatInner
      * @covers       \Differ\Formatters\Stylish\formatValue
@@ -52,9 +55,12 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers       \Differ\Differ\getFileFormatFromExtension
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
+     * @covers       \Differ\Parsers\parseContents
      * @covers       \Differ\Parsers\Json\parse
+     * @covers       \Differ\Formatters\formatDiffTree
      * @covers       \Differ\Formatters\Stylish\format
      * @covers       \Differ\Formatters\Stylish\formatInner
      * @covers       \Differ\Formatters\Stylish\formatValue
@@ -69,6 +75,7 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadFilepath1(): void
@@ -82,6 +89,7 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadFilepath2(): void
@@ -95,6 +103,7 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadExtension1(): void
@@ -107,6 +116,9 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers \Differ\Parsers\Json\parse
+     * @covers \Differ\Parsers\parseContents
+     * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadExtension2(): void
@@ -119,6 +131,11 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers \Differ\Differ\getDiffTree
+     * @covers \Differ\Formatters\formatDiffTree
+     * @covers \Differ\Parsers\Json\parse
+     * @covers \Differ\Parsers\parseContents
+     * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadFormat(): void

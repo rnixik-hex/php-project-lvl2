@@ -31,30 +31,6 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Second file '$filepath2' is not readable");
     }
 
-    $ext1 = pathinfo($filepath1)['extension'] ?? null;
-    $ext2 = pathinfo($filepath2)['extension'] ?? null;
-
-    if (!$ext1) {
-        throw new \Exception("Cannot get extension from the first file '$filepath1'");
-    }
-    if (!$ext2) {
-        throw new \Exception("Cannot get extension from the second file '$filepath2'");
-    }
-
-    $extensionToFormatMap = [
-        'json' => CONTENTS_FORMAT_JSON,
-        'yaml' => CONTENTS_FORMAT_YAML,
-        'yml' => CONTENTS_FORMAT_YAML,
-    ];
-
-    if (empty($extensionToFormatMap[$ext1])) {
-        throw new \Exception("Extension '$ext1' is unsupported'");
-    }
-
-    if (empty($extensionToFormatMap[$ext2])) {
-        throw new \Exception("Extension '$ext2' is unsupported'");
-    }
-
     $contents1 = file_get_contents($filepath1);
     if ($contents1 === false) {
         throw new \Exception("Cannot read the first file '$filepath1'");
@@ -65,8 +41,11 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Cannot read the second file '$filepath2'");
     }
 
-    $data1 = parseContents($contents1, $extensionToFormatMap[$ext1]);
-    $data2 = parseContents($contents2, $extensionToFormatMap[$ext2]);
+    $ext1 = pathinfo($filepath1)['extension'] ?? null;
+    $ext2 = pathinfo($filepath2)['extension'] ?? null;
+
+    $data1 = parseContents($contents1, getFileFormatFromExtension($ext1));
+    $data2 = parseContents($contents2, getFileFormatFromExtension($ext2));
 
     $diffTree = getDiffTree($data1, $data2);
 
@@ -137,4 +116,19 @@ function getDiffTree($data1, $data2): array
             PROP_NEW_VALUE => $data2[$key],
         ];
     }, $keys);
+}
+
+function getFileFormatFromExtension(?string $extension): string
+{
+    $extensionToFormatMap = [
+        'json' => CONTENTS_FORMAT_JSON,
+        'yaml' => CONTENTS_FORMAT_YAML,
+        'yml' => CONTENTS_FORMAT_YAML,
+    ];
+
+    if (empty($extensionToFormatMap[$extension])) {
+        throw new \Exception("Extension '$extension' is unsupported'");
+    }
+
+    return $extensionToFormatMap[$extension];
 }
