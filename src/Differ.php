@@ -74,71 +74,67 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
 }
 
 /**
- * @param mixed $value1
- * @param mixed $value2
+ * @param mixed $data1
+ * @param mixed $data2
  * @return array
  * @throws \Exception
  */
-function getDiffTree($value1, $value2): array
+function getDiffTree($data1, $data2): array
 {
-    if (!is_array($value1) || !is_array($value2)) {
-        if ($value1 === $value2) {
+    if (!is_array($data1) || !is_array($data2)) {
+        if ($data1 === $data2) {
             return [
                 PROP_KEY => KEY_ROOT,
                 PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
-                PROP_OLD_VALUE => $value1,
+                PROP_OLD_VALUE => $data1,
             ];
         }
 
         return [
             PROP_KEY => KEY_ROOT,
             PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
-            PROP_OLD_VALUE => $value1,
-            PROP_NEW_VALUE => $value2,
+            PROP_OLD_VALUE => $data1,
+            PROP_NEW_VALUE => $data2,
         ];
     }
 
-    $mergedKeys = array_merge(array_keys($value1), array_keys($value2));
+    $mergedKeys = array_merge(array_keys($data1), array_keys($data2));
     $keys = array_values(array_unique($mergedKeys));
 
-    return array_map(function ($key) use ($value1, $value2) {
-        if (array_key_exists($key, $value1) && array_key_exists($key, $value2)) {
-            if ($value1[$key] === $value2[$key]) {
-                return [
-                    PROP_KEY => $key,
-                    PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
-                    PROP_OLD_VALUE => $value1[$key],
-                ];
-            }
-            if (is_array($value1[$key]) && is_array($value2[$key])) {
-                return [
-                    PROP_KEY => $key,
-                    PROP_DIFF_TYPE => DIFF_TYPE_UPDATED_CHILDREN,
-                    PROP_CHILDREN => getDiffTree($value1[$key], $value2[$key]),
-                ];
-            }
-            return [
-                PROP_KEY => $key,
-                PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
-                PROP_OLD_VALUE => $value1[$key],
-                PROP_NEW_VALUE => $value2[$key],
-            ];
-        }
-        if (array_key_exists($key, $value2)) {
+    return array_map(function ($key) use ($data1, $data2) {
+        if (!array_key_exists($key, $data1)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_ADDED,
-                PROP_NEW_VALUE => $value2[$key],
+                PROP_NEW_VALUE => $data2[$key],
             ];
         }
-        if (array_key_exists($key, $value1)) {
+        if (!array_key_exists($key, $data2)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_REMOVED,
-                PROP_OLD_VALUE => $value1[$key],
+                PROP_OLD_VALUE => $data1[$key],
             ];
         }
-
-        throw new \Exception("Unexpected branch of code");
+        if ($data1[$key] === $data2[$key]) {
+            return [
+                PROP_KEY => $key,
+                PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
+                PROP_OLD_VALUE => $data1[$key],
+            ];
+        }
+        if (is_array($data1[$key]) && is_array($data2[$key])) {
+            return [
+                PROP_KEY => $key,
+                PROP_DIFF_TYPE => DIFF_TYPE_UPDATED_CHILDREN,
+                PROP_CHILDREN => getDiffTree($data1[$key], $data2[$key]),
+            ];
+        }
+        return [
+            PROP_KEY => $key,
+            PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
+            PROP_OLD_VALUE => $data1[$key],
+            PROP_NEW_VALUE => $data2[$key],
+        ];
     }, $keys);
 }
