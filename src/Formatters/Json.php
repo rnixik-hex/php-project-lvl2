@@ -4,7 +4,7 @@ namespace Differ\Formatters\Json;
 
 function format(array $diffTree): string
 {
-    if (!$diffTree) {
+    if (count($diffTree) === 0) {
         return '';
     }
 
