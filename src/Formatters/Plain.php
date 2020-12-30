@@ -46,7 +46,7 @@ function formatInner(array $diffTree, string $path): string
     $nodesCollection = new Collection($diffTree);
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
-    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap) {
+    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap): string {
         $formatter = $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]];
         return $output . $formatter($node);
     }, '');
