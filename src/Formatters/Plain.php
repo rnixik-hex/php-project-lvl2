@@ -74,6 +74,10 @@ function formatKeyWithPath(string $key, string $path): string
  */
 function formatValue($value): string
 {
+    if (is_object($value)) {
+        return formatValue((array) $value);
+    }
+
     $variableType = gettype($value);
 
     $typeFormattersMap = [

@@ -2,7 +2,7 @@
 
 namespace Differ\Parsers\Json;
 
-function parse(string $contents): array
+function parse(string $contents): object
 {
-    return (array) json_decode($contents, true);
+    return (object) json_decode($contents);
 }

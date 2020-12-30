@@ -75,6 +75,25 @@ class DifferTest extends TestCase
     }
 
     /**
+     * @covers       \Differ\Differ\getFileFormatFromExtension
+     * @covers       \Differ\Differ\genDiff
+     * @covers       \Differ\Differ\getDiffTree
+     * @covers       \Differ\Parsers\parseContents
+     * @covers       \Differ\Parsers\Json\parse
+     * @covers       \Differ\Formatters\formatDiffTree
+     * @covers       \Differ\Formatters\Json\format
+     */
+    public function testGenDiffArray(): void
+    {
+        $actualDiffContent = genDiff(
+            $this->getFullFixturePath('array1.json'),
+            $this->getFullFixturePath('array2.json'),
+            'json'
+        );
+        $this->assertStringEqualsFile($this->getFullFixturePath('diff_array_json.txt'), $actualDiffContent);
+    }
+
+    /**
      * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      */

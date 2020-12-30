@@ -1,0 +1,17 @@
+[
+    {
+        "key": "group1",
+        "diff_type": "updated_children",
+        "children": [
+            {
+                "key": "baz",
+                "diff_type": "unchanged",
+                "old_value": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        ]
+    }
+]

@@ -69,6 +69,10 @@ function formatInner(array $diffTree, int $depth): string
  */
 function formatValue($value, int $depth): string
 {
+    if (is_object($value)) {
+        return formatValue((array) $value, $depth);
+    }
+
     $variableType = gettype($value);
 
     $typeFormattersMap = [

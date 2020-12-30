@@ -52,68 +52,46 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
     return formatDiffTree($diffTree, $format);
 }
 
-/**
- * @param mixed $data1
- * @param mixed $data2
- * @return array
- * @throws \Exception
- */
-function getDiffTree($data1, $data2): array
+function getDiffTree(object $data1, object $data2): array
 {
-    if (!is_array($data1) || !is_array($data2)) {
-        if ($data1 === $data2) {
-            return [
-                PROP_KEY => KEY_ROOT,
-                PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
-                PROP_OLD_VALUE => $data1,
-            ];
-        }
-
-        return [
-            PROP_KEY => KEY_ROOT,
-            PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
-            PROP_OLD_VALUE => $data1,
-            PROP_NEW_VALUE => $data2,
-        ];
-    }
-
-    $mergedKeys = array_merge(array_keys($data1), array_keys($data2));
+    $mergedKeys = array_merge(array_keys(get_object_vars($data1)), array_keys(get_object_vars($data2)));
     $keys = array_values(array_unique($mergedKeys));
 
     return array_map(function ($key) use ($data1, $data2) {
-        if (!array_key_exists($key, $data1)) {
+        if (!property_exists($data1, $key)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_ADDED,
-                PROP_NEW_VALUE => $data2[$key],
+                PROP_NEW_VALUE => $data2->$key,
             ];
         }
-        if (!array_key_exists($key, $data2)) {
+        if (!property_exists($data2, $key)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_REMOVED,
-                PROP_OLD_VALUE => $data1[$key],
+                PROP_OLD_VALUE => $data1->$key,
             ];
         }
-        if ($data1[$key] === $data2[$key]) {
+        // Array values should go as is
+        if ($data1->$key === $data2->$key || is_array($data1->$key) && is_array($data2->$key)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
-                PROP_OLD_VALUE => $data1[$key],
+                PROP_OLD_VALUE => $data1->$key,
             ];
         }
-        if (is_array($data1[$key]) && is_array($data2[$key])) {
+        if (is_object($data1->$key) && is_object($data2->$key)) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_UPDATED_CHILDREN,
-                PROP_CHILDREN => getDiffTree($data1[$key], $data2[$key]),
+                PROP_CHILDREN => getDiffTree($data1->$key, $data2->$key),
             ];
         }
         return [
             PROP_KEY => $key,
             PROP_DIFF_TYPE => DIFF_TYPE_UPDATED,
-            PROP_OLD_VALUE => $data1[$key],
-            PROP_NEW_VALUE => $data2[$key],
+            PROP_OLD_VALUE => $data1->$key,
+            PROP_NEW_VALUE => $data2->$key,
         ];
     }, $keys);
 }
