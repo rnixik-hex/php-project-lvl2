@@ -18,6 +18,7 @@ class DifferTest extends TestCase
      * @dataProvider genDiffOkDataProvider
      *
      * @covers       \Differ\Differ\getFileFormatFromExtension
+     * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
      * @covers       \Differ\Parsers\parseContents
@@ -56,6 +57,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers       \Differ\Differ\getFileFormatFromExtension
+     * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
      * @covers       \Differ\Parsers\parseContents
@@ -76,6 +78,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers       \Differ\Differ\getFileFormatFromExtension
+     * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
      * @covers       \Differ\Parsers\parseContents
@@ -95,6 +98,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers \Differ\Differ\getFileFormatFromExtension
+     * @covers \Differ\Differ\isFileReadable
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadFilepath1(): void
@@ -109,6 +113,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers \Differ\Differ\getFileFormatFromExtension
+     * @covers \Differ\Differ\isFileReadable
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadFilepath2(): void
@@ -123,6 +128,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers \Differ\Differ\getFileFormatFromExtension
+     * @covers \Differ\Differ\isFileReadable
      * @covers \Differ\Differ\genDiff
      */
     public function testGenDiffBadExtension1(): void
@@ -139,6 +145,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Parsers\parseContents
      * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
+     * @covers \Differ\Differ\isFileReadable
      */
     public function testGenDiffBadExtension2(): void
     {
@@ -156,6 +163,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Parsers\parseContents
      * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
+     * @covers \Differ\Differ\isFileReadable
      */
     public function testGenDiffBadFormat(): void
     {

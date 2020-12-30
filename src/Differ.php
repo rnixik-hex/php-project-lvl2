@@ -24,10 +24,10 @@ const KEY_ROOT = 'root';
 
 function genDiff(string $filepath1, string $filepath2, string $format = 'stylish'): string
 {
-    if (!is_file($filepath1) || !is_readable($filepath1)) {
+    if (!isFileReadable($filepath1)) {
         throw new \Exception("First file '$filepath1' is not readable");
     }
-    if (!is_file($filepath2) || !is_readable($filepath2)) {
+    if (!isFileReadable($filepath2)) {
         throw new \Exception("Second file '$filepath2' is not readable");
     }
 
@@ -109,4 +109,9 @@ function getFileFormatFromExtension(?string $extension): string
     }
 
     return $extensionToFormatMap[$extension];
+}
+
+function isFileReadable(string $filepath): bool
+{
+    return is_file($filepath) && is_readable($filepath);
 }
