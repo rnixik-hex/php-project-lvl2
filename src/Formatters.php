@@ -14,7 +14,7 @@ function formatDiffTree(array $diffTree, string $format): string
         'json' => fn($diffTree) => formatJson($diffTree),
     ];
 
-    if (empty($formatToFormattersMap[$format])) {
+    if (!isset($formatToFormattersMap[$format])) {
         throw new \Exception("Format '$format' is unsupported'");
     }
 

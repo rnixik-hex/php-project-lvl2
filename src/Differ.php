@@ -104,7 +104,7 @@ function getFileFormatFromExtension(?string $extension): string
         'yml' => CONTENTS_FORMAT_YAML,
     ];
 
-    if (empty($extensionToFormatMap[$extension])) {
+    if (!isset($extensionToFormatMap[$extension])) {
         throw new \Exception("Extension '$extension' is unsupported'");
     }
 

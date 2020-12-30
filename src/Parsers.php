@@ -15,7 +15,7 @@ function parseContents(string $contents, string $contentsFormat): object
         CONTENTS_FORMAT_YAML => fn($contents) => parseYaml($contents),
     ];
 
-    if (empty($formatToParsersMap[$contentsFormat])) {
+    if (!isset($formatToParsersMap[$contentsFormat])) {
         throw new \Exception("Format '$contentsFormat' is unsupported'");
     }
 
