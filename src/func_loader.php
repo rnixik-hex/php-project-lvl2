@@ -13,7 +13,7 @@ $directoriesToScan = [
 /** @phpstan-ignore-next-line */
 array_map(
     fn($directory) => array_map(
-        function ($fileName) {
+        function ($fileName): void {
             if ($fileName === __FILE__) {
                 return;
             }

@@ -22,7 +22,7 @@ const INDENT_REMOVE = '- ';
 
 function format(array $diffTree): string
 {
-    if (!$diffTree) {
+    if (count($diffTree) === 0) {
         return '';
     }
 
@@ -57,7 +57,7 @@ function formatInner(array $diffTree, int $depth): string
     $nodesCollection = new Collection($diffTree);
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
-    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap) {
+    return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap): string {
         return $output . $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]]($node);
     }, '');
 }
@@ -90,7 +90,7 @@ function formatValue($value, int $depth): string
 
     $indent = str_repeat(INDENT_DOUBLE, $depth);
 
-    return "{\n" . array_reduce(array_keys($value), function ($output, $key) use ($value, $indent, $depth) {
+    return "{\n" . array_reduce(array_keys($value), function ($output, $key) use ($value, $indent, $depth): string {
         return $output . $indent . INDENT_DOUBLE . "$key: " . formatValue($value[$key], $depth + 1);
     }, '') . $indent . "}" . "\n";
 }

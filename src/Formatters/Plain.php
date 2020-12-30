@@ -6,6 +6,7 @@ use Tightenco\Collect\Support\Collection;
 
 use const Differ\Differ\DIFF_TYPE_ADDED;
 use const Differ\Differ\DIFF_TYPE_REMOVED;
+use const Differ\Differ\DIFF_TYPE_UNCHANGED;
 use const Differ\Differ\DIFF_TYPE_UPDATED;
 use const Differ\Differ\DIFF_TYPE_UPDATED_CHILDREN;
 use const Differ\Differ\PROP_CHILDREN;
@@ -16,7 +17,7 @@ use const Differ\Differ\PROP_OLD_VALUE;
 
 function format(array $diffTree): string
 {
-    if (!$diffTree) {
+    if (count($diffTree) === 0) {
         return '';
     }
 
@@ -37,6 +38,8 @@ function formatInner(array $diffTree, string $path): string
 
         DIFF_TYPE_UPDATED_CHILDREN =>
             fn($node) => formatInner($node[PROP_CHILDREN], appendKeyToPath($node[PROP_KEY], $path)),
+
+        DIFF_TYPE_UNCHANGED => fn($node) => '',
     ];
 
     // Use collection to sort nodes without data mutation
@@ -44,10 +47,7 @@ function formatInner(array $diffTree, string $path): string
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
     return array_reduce($sortedNodes, function ($output, $node) use ($diffTypeFormattersMap) {
-        $formatter = $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]] ?? null;
-        if (!$formatter) {
-            return $output;
-        }
+        $formatter = $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]];
         return $output . $formatter($node);
     }, '');
 }
