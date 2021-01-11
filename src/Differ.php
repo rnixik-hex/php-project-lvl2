@@ -72,8 +72,7 @@ function getDiffTree(object $data1, object $data2): array
                 PROP_OLD_VALUE => $data1->$key,
             ];
         }
-        // Array values should go as is
-        if ($data1->$key === $data2->$key || is_array($data1->$key) && is_array($data2->$key)) {
+        if ($data1->$key === $data2->$key) {
             return [
                 PROP_KEY => $key,
                 PROP_DIFF_TYPE => DIFF_TYPE_UNCHANGED,
