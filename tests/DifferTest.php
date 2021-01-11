@@ -21,7 +21,7 @@ class DifferTest extends TestCase
      * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
-     * @covers       \Differ\Parsers\parseContents
+     * @covers       \Differ\Parsers\parseContent
      * @covers       \Differ\Parsers\Json\parse
      * @covers       \Differ\Parsers\Yaml\parse
      * @covers       \Differ\Formatters\formatDiffTree
@@ -60,7 +60,7 @@ class DifferTest extends TestCase
      * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
-     * @covers       \Differ\Parsers\parseContents
+     * @covers       \Differ\Parsers\parseContent
      * @covers       \Differ\Parsers\Json\parse
      * @covers       \Differ\Formatters\formatDiffTree
      * @covers       \Differ\Formatters\Stylish\format
@@ -81,7 +81,7 @@ class DifferTest extends TestCase
      * @covers       \Differ\Differ\isFileReadable
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Differ\getDiffTree
-     * @covers       \Differ\Parsers\parseContents
+     * @covers       \Differ\Parsers\parseContent
      * @covers       \Differ\Parsers\Json\parse
      * @covers       \Differ\Formatters\formatDiffTree
      * @covers       \Differ\Formatters\Json\format
@@ -142,7 +142,7 @@ class DifferTest extends TestCase
 
     /**
      * @covers \Differ\Parsers\Json\parse
-     * @covers \Differ\Parsers\parseContents
+     * @covers \Differ\Parsers\parseContent
      * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      * @covers \Differ\Differ\isFileReadable
@@ -160,7 +160,7 @@ class DifferTest extends TestCase
      * @covers \Differ\Differ\getDiffTree
      * @covers \Differ\Formatters\formatDiffTree
      * @covers \Differ\Parsers\Json\parse
-     * @covers \Differ\Parsers\parseContents
+     * @covers \Differ\Parsers\parseContent
      * @covers \Differ\Differ\getFileFormatFromExtension
      * @covers \Differ\Differ\genDiff
      * @covers \Differ\Differ\isFileReadable

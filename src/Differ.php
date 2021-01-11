@@ -3,7 +3,7 @@
 namespace Differ\Differ;
 
 use function Differ\Formatters\formatDiffTree;
-use function Differ\Parsers\parseContents;
+use function Differ\Parsers\parseContent;
 
 use const Differ\Parsers\CONTENTS_FORMAT_JSON;
 use const Differ\Parsers\CONTENTS_FORMAT_YAML;
@@ -31,21 +31,21 @@ function genDiff(string $filepath1, string $filepath2, string $format = 'stylish
         throw new \Exception("Second file '$filepath2' is not readable");
     }
 
-    $contents1 = file_get_contents($filepath1);
-    if ($contents1 === false) {
+    $content1 = file_get_contents($filepath1);
+    if ($content1 === false) {
         throw new \Exception("Cannot read the first file '$filepath1'");
     }
 
-    $contents2 = file_get_contents($filepath2);
-    if ($contents2 === false) {
+    $content2 = file_get_contents($filepath2);
+    if ($content2 === false) {
         throw new \Exception("Cannot read the second file '$filepath2'");
     }
 
     $ext1 = pathinfo($filepath1)['extension'] ?? null;
     $ext2 = pathinfo($filepath2)['extension'] ?? null;
 
-    $data1 = parseContents($contents1, getFileFormatFromExtension($ext1));
-    $data2 = parseContents($contents2, getFileFormatFromExtension($ext2));
+    $data1 = parseContent($content1, getFileFormatFromExtension($ext1));
+    $data2 = parseContent($content2, getFileFormatFromExtension($ext2));
 
     $diffTree = getDiffTree($data1, $data2);
 

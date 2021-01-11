@@ -8,7 +8,7 @@ use function Differ\Parsers\Yaml\parse as parseYaml;
 const CONTENTS_FORMAT_JSON = 'json';
 const CONTENTS_FORMAT_YAML = 'yaml';
 
-function parseContents(string $contents, string $contentsFormat): object
+function parseContent(string $contents, string $contentsFormat): object
 {
     $formatToParsersMap = [
         CONTENTS_FORMAT_JSON => fn($contents) => parseJson($contents),
