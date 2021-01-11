@@ -71,6 +71,11 @@ function formatInner(array $diffTree, int $depth): string
  */
 function formatValue($value, int $depth): string
 {
+    $isPlainArray = is_array($value) && array_keys($value) === range(0, count($value) - 1);
+    if ($isPlainArray) {
+        return '[' . implode(', ', $value) . ']' . "\n";
+    }
+
     if (is_object($value)) {
         return formatValue((array) $value, $depth);
     }
