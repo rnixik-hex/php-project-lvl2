@@ -18,11 +18,11 @@ Usage:
   gendiff [--format <fmt>] <firstFile> <secondFile>
 
 Options:
-  -h --help                     Show this screen
-  -v --version                  Show version
-  --format (stylish|plain|json) Report format [default: stylish]
+  -h --help                      Show this screen
+  -v --version                   Show version
+  --format (stylish|plain|json)  Report format [default: stylish]
 DOC;
 
 $args = Docopt::handle($doc);
-$diff = \Differ\Differ\genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format'] ?? 'stylish');
+$diff = \Differ\Differ\genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
 echo "$diff\n";
