@@ -75,25 +75,21 @@ function formatKeyWithPath(string $key, string $path): string
  */
 function formatValue($value): string
 {
-    if (is_object($value)) {
-        return formatValue((array) $value);
+    if (is_null($value)) {
+        return 'null';
     }
 
-    $variableType = gettype($value);
-
-    $typeFormattersMap = [
-        'boolean' => fn($value) => $value ? 'true' : 'false',
-        'string' => fn($value) => "'$value'",
-        'NULL' => fn($value) => 'null',
-    ];
-
-    if (isset($typeFormattersMap[$variableType])) {
-        return $typeFormattersMap[$variableType]($value);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
 
-    if (!is_array($value)) {
-        return ((string) $value);
+    if (is_string($value)) {
+        return "'$value'";
     }
 
-    return "[complex value]";
+    if (is_object($value) || is_array($value)) {
+        return "[complex value]";
+    }
+
+    return ((string) $value);
 }
