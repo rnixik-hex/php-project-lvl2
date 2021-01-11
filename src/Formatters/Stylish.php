@@ -71,33 +71,26 @@ function formatInner(array $diffTree, int $depth): string
  */
 function formatValue($value, int $depth): string
 {
-    $isPlainArray = is_array($value) && array_keys($value) === range(0, count($value) - 1);
-    if ($isPlainArray) {
+    if (is_null($value)) {
+        return "null\n";
+    }
+
+    if (is_bool($value)) {
+        return ($value ? 'true' : 'false') . "\n";
+    }
+
+    if (is_array($value)) {
         return '[' . implode(', ', $value) . ']' . "\n";
     }
 
     if (is_object($value)) {
-        return formatValue((array) $value, $depth);
+        $indent = str_repeat(INDENT_DOUBLE, $depth);
+        $keys = array_keys(get_object_vars($value));
+
+        return "{\n" . array_reduce($keys, function ($output, $key) use ($value, $indent, $depth): string {
+                return $output . $indent . INDENT_DOUBLE . "$key: " . formatValue($value->{$key}, $depth + 1);
+        }, '') . $indent . "}" . "\n";
     }
 
-    $variableType = gettype($value);
-
-    $typeFormattersMap = [
-        'boolean' => fn($value) => $value ? 'true' : 'false',
-        'NULL' => fn($value) => 'null',
-    ];
-
-    if (isset($typeFormattersMap[$variableType])) {
-        return $typeFormattersMap[$variableType]($value) . "\n";
-    }
-
-    if (!is_array($value)) {
-        return ((string) $value) . "\n";
-    }
-
-    $indent = str_repeat(INDENT_DOUBLE, $depth);
-
-    return "{\n" . array_reduce(array_keys($value), function ($output, $key) use ($value, $indent, $depth): string {
-        return $output . $indent . INDENT_DOUBLE . "$key: " . formatValue($value[$key], $depth + 1);
-    }, '') . $indent . "}" . "\n";
+    return ((string) $value) . "\n";
 }
