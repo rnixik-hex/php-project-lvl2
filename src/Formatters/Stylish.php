@@ -41,7 +41,7 @@ function formatInner(array $diffTree, int $depth): string
             . formatValue($node[PROP_OLD_VALUE], $depth),
 
         DIFF_TYPE_UPDATED => fn($node) => $indent . INDENT_REMOVE . $node[PROP_KEY] . ': '
-            . formatValue($node[PROP_OLD_VALUE], $depth)
+            . formatValue($node[PROP_OLD_VALUE], $depth) . "\n"
             . $indent . INDENT_ADD . $node[PROP_KEY] . ': '
             . formatValue($node[PROP_NEW_VALUE], $depth),
 
@@ -50,7 +50,7 @@ function formatInner(array $diffTree, int $depth): string
 
         DIFF_TYPE_UPDATED_CHILDREN => fn($node) =>  $indent . INDENT_HALF . $node[PROP_KEY] . ": {\n"
             . formatInner($node[PROP_CHILDREN], $depth + 1)
-            . $indent . INDENT_HALF . "}\n",
+            . $indent . INDENT_HALF . "}",
     ];
 
     // Use collection to sort nodes without data mutation
@@ -58,7 +58,7 @@ function formatInner(array $diffTree, int $depth): string
     $sortedNodes = $nodesCollection->sortBy('key')->toArray();
 
     $lines = array_map(function ($node) use ($diffTypeFormattersMap): string {
-        return $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]]($node);
+        return $diffTypeFormattersMap[$node[PROP_DIFF_TYPE]]($node) . "\n";
     }, $sortedNodes);
 
     return implode('', $lines);
@@ -72,15 +72,15 @@ function formatInner(array $diffTree, int $depth): string
 function formatValue($value, int $depth): string
 {
     if (is_null($value)) {
-        return "null\n";
+        return 'null';
     }
 
     if (is_bool($value)) {
-        return ($value ? 'true' : 'false') . "\n";
+        return $value ? 'true' : 'false';
     }
 
     if (is_array($value)) {
-        return '[' . implode(', ', $value) . ']' . "\n";
+        return '[' . implode(', ', $value) . ']';
     }
 
     if (is_object($value)) {
@@ -88,9 +88,9 @@ function formatValue($value, int $depth): string
         $keys = array_keys(get_object_vars($value));
 
         return "{\n" . array_reduce($keys, function ($output, $key) use ($value, $indent, $depth): string {
-                return $output . $indent . INDENT_DOUBLE . "$key: " . formatValue($value->{$key}, $depth + 1);
-        }, '') . $indent . "}" . "\n";
+                return $output . $indent . INDENT_DOUBLE . "$key: " . formatValue($value->{$key}, $depth + 1) . "\n";
+        }, '') . $indent . "}";
     }
 
-    return ((string) $value) . "\n";
+    return (string) $value;
 }
